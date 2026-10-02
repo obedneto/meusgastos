@@ -21,7 +21,9 @@ jobs:
 
       - name: Compilar APK
         run: |
-          cd "$(dirname "$(find . -name settings.gradle.kts | head -1)")"
+          shopt -s nullglob
+          for z in *.zip; do unzip -q -o "$z" -d src; done
+          cd "$(dirname "$(find . -name settings.gradle.kts -not -path './.git/*' | head -1)")"
           gradle :app:assembleDebug --no-daemon
 
       - uses: actions/upload-artifact@v4
